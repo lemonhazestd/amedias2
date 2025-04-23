@@ -36,5 +36,26 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Mostrar la primera categoría por defecto
-    mostrarCategoria("zoquetes");
+    mostrarCategoria("soquetes");
+});
+
+// Lazy loading con IntersectionObserver
+const lazyImages = document.querySelectorAll("img.lazy-img");
+
+const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src; // Carga la imagen
+            img.classList.remove("lazy-img"); // Quita la clase para evitar recarga
+            observer.unobserve(img); // Deja de observar la imagen
+        }
+    });
+}, {
+    rootMargin: "100px" // Carga un poco antes de que aparezca
+});
+
+// Observamos todas las imágenes con la clase lazy-img
+lazyImages.forEach(img => {
+    imageObserver.observe(img);
 });
